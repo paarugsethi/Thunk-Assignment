@@ -1,0 +1,81 @@
+import { saveData } from "../../utils/localStorage";
+import { appConstants } from "./actionTypes";
+
+const initState = {
+  todos: [],
+  isLoading: true,
+  isError: false
+};
+
+function appReducer(state = initState, action) {
+  switch (action.type) {
+    case appConstants.GET_TODO_REQUEST: {
+      return {
+        ...state,
+        isLoading: true,
+        isError: false
+      };
+    }
+    case appConstants.GET_TODO_SUCCESS: {
+      return {
+        ...state,
+        todos: action.payload.todos,
+        isLoading: false
+      };
+    }
+    case appConstants.GET_TODO_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true
+      };
+    }
+
+    case appConstants.ADD_TODO_REQUEST: {
+      return {
+        ...state,
+        isLoading: true,
+        isError: false
+      };
+    }
+    case appConstants.ADD_TODO_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false
+      };
+    }
+    case appConstants.ADD_TODO_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        isError: true
+      };
+    }
+    case appConstants.ADD_TODO: {
+      return {
+        ...state,
+        todos: [...state.todos, action.payload]
+      };
+    }
+    case appConstants.REMOVE_TODO_ITEM: {
+      return {
+        ...state,
+        todos: state.todos.filter((item) => item.id !== action?.payload?.id)
+      };
+    }
+    case appConstants.TOGGLE_TODO_STATUS: {
+      return {
+        ...state,
+        todos: state.todos.map((item) =>
+          item.id === action.payload.id
+            ? { ...item, status: !item.status }
+            : item
+        )
+      };
+    }
+    default:
+      return state;
+  }
+}
+
+export default appReducer;
